@@ -3,7 +3,7 @@ import threading
 
 
 def performsetup(screen):
-    spritethreads=[]
+    spritethreads = []
 
     # loop
     # threads.append(threading.Thread(target=, args=))
@@ -11,23 +11,34 @@ def performsetup(screen):
 
 
 def main():
+    # all setup goes here ##
     pygame.init()
+    # screen is where everything is drawn or blited
     screen = pygame.display.set_mode()
     clock = pygame.time.Clock()
     frametime = 0
     running = True
-    spritethreads = performsetup(screen)
+
+    # an array of sprite threads
+    # spritethreads = performsetup(screen)
+
+    # ###########################################
+    # main loop runs at 30fps
     while running:
+        # close program
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        for spritethread in spritethreads:
-            spritethread.run()
+
+        # used to update and draw sprites
+        # for spritethread in spritethreads:
+        # spritethread.run()
+
+        # clear screen
         pygame.display.flip()
+        # set speed of frames and count frames
         clock.tick(30)
         frametime += 1
 
 
-
 main()
-
