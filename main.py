@@ -1,13 +1,18 @@
 import pygame
 import threading
 
+import pygame.sprite
+import Gun
+import Player
+import Map
 
-def performsetup(screen):
-    spritethreads = []
 
-    # loop
-    # threads.append(threading.Thread(target=, args=))
-    return spritethreads
+def performsetup(sprites: list):
+    gamesprites = [Player.player(), *sprites]
+    gamespritesgroup = pygame.sprite.Group()
+    for sprite in gamesprites:
+        gamespritesgroup.add(sprite)
+    return gamesprites[0], gamespritesgroup
 
 
 def main():
@@ -18,9 +23,9 @@ def main():
     clock = pygame.time.Clock()
     frametime = 0
     running = True
-
-    # an array of sprite threads
-    # spritethreads = performsetup(screen)
+    generatedsprites = []
+    # spritegroup setup based on player+generation from map
+    player, gamespritegroup = performsetup(generatedsprites)
 
     # ###########################################
     # main loop runs at 60fps
@@ -29,11 +34,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+            # TODO elif event.type == "keydown":
+            # player.move(key)
+            # pass
 
+        # clear screen
+        screen.fill((0, 0, 0))
         # used to update and draw sprites
-        # for spritethread in spritethreads:
-        # spritethread.run()
-
+        gamespritegroup.update()
+        gamespritegroup.draw(screen)
         # clear screen
         pygame.display.flip()
         # set speed of frames and count frames
