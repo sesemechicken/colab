@@ -23,7 +23,7 @@ def main():
     # spritethreads = performsetup(screen)
 
     # ###########################################
-    # main loop runs at 30fps
+    # main loop runs at 60fps
     while running:
         # close program
         for event in pygame.event.get():
@@ -37,7 +37,7 @@ def main():
         # clear screen
         pygame.display.flip()
         # set speed of frames and count frames
-        clock.tick(30)
+        clock.tick(60)
         frametime += 1
 
 
