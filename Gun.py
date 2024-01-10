@@ -1,18 +1,60 @@
+import os
+from math import floor
+
 import pygame.sprite
+
+#pistolframes = pygame.image.load('assets/PISTOL/').convert_alpha()
+#assultframes = pygame.image.load('assets/ASSAULT RIFLE/').convert_alpha()
+shotgunframes = pygame.image.load('assets/SHOTGUN/spritesheet.png').convert_alpha()
 
 
 class gun(pygame.sprite.Sprite):
-    def __init__(self, playerx, playery, type):
+    def __init__(self, type):
         super().__init__()
-        self.height = 23
-        self.width = 25
-        self.x, self.y = playerx, playery
+        self.height = 32
+        self.width = 160
+        self.x, self.y = 0, 0
+        self.direction = 1
+        if type == "shotgun":
+            self.framesprite = shotgunframes
+        #elif type == "assult rifle":
+            #self.framesprite = assultframes
+        #elif type == "pistol":
+            #self.framesprite = pistolframes
+        self.type = type
         self.ammo = 0
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill("green")
+        self.shooting = False
+        self.frame = 0
+        self.image = pygame.Surface((self.width, self.height)).convert_alpha()
+        self.rect = self.image.get_rect(midtop=(self.x, self.y))
 
-    def update(self, *args):
-        pass
+    def updatespriteimg(self):
+
+        if self.shooting:
+            self.frame += .25
+        if self.frame >= 4:
+            self.shooting = False
+            self.frame = 0
+
+        selectedframe = pygame.Surface((self.width, self.height)).convert_alpha()
+        selectedframe.blit(self.framesprite, (0, 0), (self.width * floor(self.frame), 0, self.width, self.height))
+
+        if self.direction == -1:
+            selectedframe = pygame.transform.flip(selectedframe, True, False)
+            self.x-=30
+        else:
+            self.x+=50
+        self.image = pygame.transform.scale(selectedframe, (self.width/1.5, self.height/1.5))
+        self.image.set_colorkey((0, 0, 0))
+        self.rect = self.image.get_rect(midtop=(self.x, self.y+5))
+
+    def update(self, playerpos):
+        self.x, self.y, self.direction = playerpos
+        self.updatespriteimg()
+
+    def shoot(self):
+        bullet(self.rect.x, self.rect.y, self.type)
+        self.shooting = True
 
 
 class bullet(pygame.sprite.Sprite):
