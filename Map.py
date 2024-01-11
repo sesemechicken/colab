@@ -3,8 +3,8 @@ import os
 
 import pygame.sprite
 
+# load mapdata
 maps = [open('assets/MAPS/' + file).read() for file in os.listdir('assets/MAPS')]
-
 tilesize = 35
 size = tilesize * 100
 enemys = []

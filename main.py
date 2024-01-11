@@ -30,6 +30,7 @@ def performsetup(tilesprites: list, enemysprites:list):
 
 
 def main():
+    # setup map and game loop
     frametime = 0
     running = True
     Map.generatetiles(0)
@@ -45,6 +46,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
             if event.type == pygame.KEYDOWN:
+                #perform action on key press
                 pressed = pygame.key.get_pressed()
                 if pressed[pygame.K_w]:
                     player.sprites()[0].move('w')
@@ -55,6 +57,7 @@ def main():
                 if pressed[pygame.K_SPACE]:
                     gun.sprites()[0].shoot()
             if event.type == pygame.KEYUP:
+                #stop moving on key release
                 if event.key not in [pygame.K_w, pygame.K_SPACE]:
                     player.sprites()[0].move()
 
@@ -67,7 +70,6 @@ def main():
         player.draw(screen)
         gun.update(player.sprites()[0].getpos())
         gun.draw(screen)
-
         enemyspritesgroup.update()
         enemyspritesgroup.draw(screen)
         # clear screen

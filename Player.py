@@ -26,7 +26,7 @@ class player(pygame.sprite.Sprite):
         self.direction = 1
         self.xvel = 0
         self.yvel = 0
-        # used for pygameui of dino
+        # used for pygameui of dinosuar
         self.frame = 1
         self.spritesheet = spritesheets[0]
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
@@ -58,8 +58,8 @@ class player(pygame.sprite.Sprite):
             # stop moving
             self.xvel = 0
 
+        #check for collide before hitting
         self.checkfururecolide(maptiles)
-
         # apply velocity to y-axis of image
         self.rect.y += self.yvel
         # apply velocity to x-axis of image
@@ -88,18 +88,24 @@ class player(pygame.sprite.Sprite):
         elif self.standingstill:
             self.frame = 1
 
+        # make a new surface to load the image on
         selectedframe = pygame.Surface((self.width, self.height)).convert_alpha()
+        # make frame size smaller than the image but covering one frame at a time =
         selectedframe.blit(self.spritesheet, (0, 0), (floor(self.frame) * self.width, 0, self.height, self.width))
+        # used if facing opposite way
         if self.direction == -1:
             selectedframe = pygame.transform.flip(selectedframe, True, False)
+        # resize and set as active image
         self.image = pygame.transform.scale(selectedframe, (self.width * 2, self.height * 2))
         self.image.set_colorkey((0, 0, 0))
 
     def move(self, key=None):
-
+        # no double jumping and break out of the function dont want to move and jump without cause due to moving variable
         if not self.jumping and key == "w":
             self.jumping = True
             return
+
+        # horizontal controls change direction and reset velocity
         elif key == "d":
             self.direction = 1
             self.xvel = 0
@@ -108,10 +114,12 @@ class player(pygame.sprite.Sprite):
             self.direction = -1
             self.xvel = 0
 
+        # if pressing any key on keyboard move to the right for some sreason @me
         if key is not None:
             self.moving = True
             self.standingstill = False
 
+        #if no key is pressed at all
         else:
             self.moving = False
             self.standingstill = True
@@ -120,5 +128,6 @@ class player(pygame.sprite.Sprite):
         if self.rect.collideobjects(maptiles):
             print("hit")
 
+    # currentlly used to make gun in right place
     def getpos(self):
         return self.rect.center[0], self.rect.center[1], self.direction
