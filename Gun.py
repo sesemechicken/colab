@@ -71,10 +71,10 @@ class bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update(self, *args):
-        self.rect.x += self.velx,
-        self.rect.y += self.vely
         self.velx -= self.acceleration
         self.vely += self.acceleration
+        self.rect.x += self.velx,
+        self.rect.y += self.vely
 
     def getpos(self):
-        return
+        return self.rect.x, self.rect.y

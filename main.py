@@ -13,25 +13,29 @@ import Player
 import Map
 
 
-def performsetup(sprites: list):
+def performsetup(tilesprites: list, enemysprites:list):
     playerspritegroup = pygame.sprite.Group()
     playerspritegroup.add(Player.player())
 
     gunspritegroup = pygame.sprite.Group()
     gunspritegroup.add(Gun.gun("shotgun"))
 
-    gamespritesgroup = pygame.sprite.Group()
-    gamespritesgroup.add(*sprites)
+    tilespritesgroup = pygame.sprite.Group()
+    tilespritesgroup.add(*tilesprites)
 
-    return playerspritegroup, gunspritegroup, gamespritesgroup
+    enemyspritesgroup = pygame.sprite.Group()
+    enemyspritesgroup.add(*enemysprites)
+
+    return playerspritegroup, gunspritegroup, tilespritesgroup, enemyspritesgroup
 
 
 def main():
     frametime = 0
     running = True
-    generatedsprites = []
-    # spritegroup setup based on player+generation from map
-    player, gun, gamespritegroup = performsetup(generatedsprites)
+    Map.generatetiles(0)
+    Map.generateenemys(0)
+    # spritegroups setup based on player, gun, map and enemygeneration from map
+    player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.gettiles(), Map.getenemys())
 
     # ###########################################
     # main loop runs at 60fps
@@ -50,7 +54,6 @@ def main():
                     player.sprites()[0].move('d')
                 if pressed[pygame.K_SPACE]:
                     gun.sprites()[0].shoot()
-                    print(1)
             if event.type == pygame.KEYUP:
                 if event.key not in [pygame.K_w, pygame.K_SPACE]:
                     player.sprites()[0].move()
@@ -58,12 +61,15 @@ def main():
         # clear screen
         screen.fill((0, 0, 0))
         # used to update and draw sprites
-        player.update()
+        tilespritesgroup.update()
+        tilespritesgroup.draw(screen)
+        player.update(Map.gettiles())
         player.draw(screen)
         gun.update(player.sprites()[0].getpos())
         gun.draw(screen)
-        gamespritegroup.update()
-        gamespritegroup.draw(screen)
+
+        enemyspritesgroup.update()
+        enemyspritesgroup.draw(screen)
         # clear screen
         pygame.display.flip()
         # set speed of frames and count frames

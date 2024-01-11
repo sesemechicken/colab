@@ -32,7 +32,7 @@ class player(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
-    def update(self):
+    def update(self, maptiles):
         # please note speed and velocity are interchangeable terms but velocity can be either direction
 
         # vertical movements ###########################
@@ -48,9 +48,6 @@ class player(pygame.sprite.Sprite):
                 self.falling = True
                 self.jumping = False
 
-        # apply velocity to y-axis of image
-        self.rect.y += self.yvel
-
         # horizontal movements ###########################
 
         if self.moving:
@@ -60,8 +57,14 @@ class player(pygame.sprite.Sprite):
         else:
             # stop moving
             self.xvel = 0
+
+        self.checkfururecolide(maptiles)
+
+        # apply velocity to y-axis of image
+        self.rect.y += self.yvel
         # apply velocity to x-axis of image
         self.rect.x += self.xvel
+
         self.updatespriteimg()
 
     def updatespriteimg(self):
@@ -113,13 +116,9 @@ class player(pygame.sprite.Sprite):
             self.moving = False
             self.standingstill = True
 
-    def collided(self, axis: tuple):
-
-        if axis[1]:
-            self.falling = False
-
-        if axis[0]:
-            self.xvel = 0
+    def checkfururecolide(self, maptiles):
+        if self.rect.collideobjects(maptiles):
+            print("hit")
 
     def getpos(self):
-        return self.rect.center[0],self.rect.center[1], self.direction
+        return self.rect.center[0], self.rect.center[1], self.direction
