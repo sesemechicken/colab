@@ -37,7 +37,7 @@ def main():
     Map.generateenemys(0)
     # spritegroups setup based on player, gun, map and enemygeneration from map
     player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.gettiles(), Map.getenemys())
-
+    bulletspritesgroup = pygame.sprite.Group()
     # ###########################################
     # main loop runs at 60fps
     while running:
@@ -55,7 +55,7 @@ def main():
                 if pressed[pygame.K_d]:
                     player.sprites()[0].move('d')
                 if pressed[pygame.K_SPACE]:
-                    gun.sprites()[0].shoot()
+                    bulletspritesgroup.add(gun.sprites()[0].shoot())
             if event.type == pygame.KEYUP:
                 #stop moving on key release
                 if event.key not in [pygame.K_w, pygame.K_SPACE]:
@@ -72,6 +72,8 @@ def main():
         gun.draw(screen)
         enemyspritesgroup.update()
         enemyspritesgroup.draw(screen)
+        bulletspritesgroup.update()
+        bulletspritesgroup.draw(screen)
         # clear screen
         pygame.display.flip()
         # set speed of frames and count frames

@@ -1,11 +1,12 @@
 import os
 from math import floor
+import random
 
 import pygame.sprite
 
 # load gun frames
-#pistolframes = pygame.image.load('assets/PISTOL/').convert_alpha()
-#assultframes = pygame.image.load('assets/ASSAULT RIFLE/').convert_alpha()
+# pistolframes = pygame.image.load('assets/PISTOL/').convert_alpha()
+# assultframes = pygame.image.load('assets/ASSAULT RIFLE/').convert_alpha()
 shotgunframes = pygame.image.load('assets/SHOTGUN/spritesheet.png').convert_alpha()
 
 
@@ -19,10 +20,10 @@ class gun(pygame.sprite.Sprite):
         self.direction = 1
         if type == "shotgun":
             self.framesprite = shotgunframes
-        #elif type == "assult rifle":
-            #self.framesprite = assultframes
-        #elif type == "pistol":
-            #self.framesprite = pistolframes
+        # elif type == "assult rifle":
+        # self.framesprite = assultframes
+        # elif type == "pistol":
+        # self.framesprite = pistolframes
         self.type = type
         self.ammo = 0
         self.shooting = False
@@ -44,12 +45,12 @@ class gun(pygame.sprite.Sprite):
         # some handwritten values due to inconsitencies
         if self.direction == -1:
             selectedframe = pygame.transform.flip(selectedframe, True, False)
-            self.x-=30
+            self.x -= 30
         else:
-            self.x+=50
-        self.image = pygame.transform.scale(selectedframe, (self.width/1.5, self.height/1.5))
+            self.x += 50
+        self.image = pygame.transform.scale(selectedframe, (self.width / 1.5, self.height / 1.5))
         self.image.set_colorkey((0, 0, 0))
-        self.rect = self.image.get_rect(midtop=(self.x, self.y+5))
+        self.rect = self.image.get_rect(midtop=(self.x, self.y + 5))
 
     def update(self, playerpos):
         # uses the player loaction to place the gun and update the image
@@ -57,30 +58,36 @@ class gun(pygame.sprite.Sprite):
         self.updatespriteimg()
 
     def shoot(self):
-        # make a bullet and animate the gun
-        bullet(self.rect.x, self.rect.y, self.type)
         self.shooting = True
+        # make a bullet and animate the gun
+        bullets=[bullet(self.rect.center, self.direction) for i in range(5)]
+        return bullets
 
 
 class bullet(pygame.sprite.Sprite):
-    def __init__(self, gunx, guny, type):
+    def __init__(self, gunpos, direction):
         # unfinished
         super().__init__()
         self.height = 2
         self.width = 4
-        self.x, self.y = gunx, guny
-        self.velx = 10
-        self.vely = 0
+        self.x, self.y = gunpos[0], gunpos[1]
+        self.velx = 7 + random.randint(-5, 5)/2
+        self.vely = -1 + random.randint(-5, 5)/5
+        if direction <0:
+            self.velx*=-1
+        self.direction=direction
         self.acceleration = .1
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill("white")
-        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+        self.rect = self.image.get_rect(center=(self.x, self.y))
 
     def update(self, *args):
-        self.velx -= self.acceleration
+        self.velx -= self.acceleration* self.direction
         self.vely += self.acceleration
-        self.rect.x += self.velx,
-        self.rect.y += self.vely
+        self.rect.x += self.velx
+        self.rect.y += self.vely / 2
+        if -.5<self.velx<.5:
+            self.kill()
 
     def getpos(self):
         return self.rect.x, self.rect.y
