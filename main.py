@@ -13,12 +13,12 @@ import Player
 import Map
 
 
-def performsetup(tilesprites: list, enemysprites:list):
+def performsetup(tilesprites: list, enemysprites: list):
     playerspritegroup = pygame.sprite.Group()
     playerspritegroup.add(Player.player())
 
     gunspritegroup = pygame.sprite.Group()
-    gunspritegroup.add(Gun.gun("shotgun"))
+    gunspritegroup.add(Gun.gun("assault rifle"))
 
     tilespritesgroup = pygame.sprite.Group()
     tilespritesgroup.add(*tilesprites)
@@ -41,26 +41,27 @@ def main():
     # ###########################################
     # main loop runs at 60fps
     while running:
-        # close program
+
+                # perform action on key press
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_w]:
+            player.sprites()[0].move('w')
+        if pressed[pygame.K_a]:
+            player.sprites()[0].move('a')
+        if pressed[pygame.K_d]:
+            player.sprites()[0].move('d')
+        if pressed[pygame.K_SPACE]:
+            if not gun.sprites()[0].shotdelay:
+                bulletspritesgroup.add(gun.sprites()[0].shoot())
+
+                # close program
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            if event.type == pygame.KEYDOWN:
-                #perform action on key press
-                pressed = pygame.key.get_pressed()
-                if pressed[pygame.K_w]:
-                    player.sprites()[0].move('w')
-                if pressed[pygame.K_a]:
-                    player.sprites()[0].move('a')
-                if pressed[pygame.K_d]:
-                    player.sprites()[0].move('d')
-                if pressed[pygame.K_SPACE]:
-                    bulletspritesgroup.add(gun.sprites()[0].shoot())
             if event.type == pygame.KEYUP:
-                #stop moving on key release
+                # stop moving on key release
                 if event.key not in [pygame.K_w, pygame.K_SPACE]:
                     player.sprites()[0].move()
-
         # clear screen
         screen.fill((0, 0, 0))
         # used to update and draw sprites

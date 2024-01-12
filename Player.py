@@ -49,7 +49,7 @@ class player(pygame.sprite.Sprite):
                 self.jumping = False
 
         # horizontal movements ###########################
-
+        print(self.xvel,self.acceleration,self.direction)
         if self.moving:
             # change velocity until max speed is reached
             if -2 <= self.xvel <= 2:
@@ -58,8 +58,9 @@ class player(pygame.sprite.Sprite):
             # stop moving
             self.xvel = 0
 
+        print(self.xvel)
         #check for collide before hitting
-        self.checkfururecolide(maptiles)
+        #self.checkfururecolide(maptiles)
         # apply velocity to y-axis of image
         self.rect.y += self.yvel
         # apply velocity to x-axis of image
@@ -100,29 +101,27 @@ class player(pygame.sprite.Sprite):
         self.image.set_colorkey((0, 0, 0))
 
     def move(self, key=None):
+        if key is None:
+            self.moving = False
+            self.standingstill = True
+            self.velx=0
+
         # no double jumping and break out of the function dont want to move and jump without cause due to moving variable
-        if not self.jumping and key == "w":
+        elif not self.jumping and key == "w":
             self.jumping = True
-            return
 
         # horizontal controls change direction and reset velocity
         elif key == "d":
             self.direction = 1
-            self.xvel = 0
-
-        elif key == "a":
-            self.direction = -1
-            self.xvel = 0
-
-        # if pressing any key on keyboard move to the right for some sreason @me
-        if key is not None:
             self.moving = True
             self.standingstill = False
 
+        elif key == "a":
+            self.direction = -1
+            self.moving = True
+            self.standingstill = False
         #if no key is pressed at all
-        else:
-            self.moving = False
-            self.standingstill = True
+
 
     def checkfururecolide(self, maptiles):
         if self.rect.collideobjects(maptiles):
