@@ -51,7 +51,8 @@ def main():
         if pressed[pygame.K_d]:
             player.sprites()[0].move('d')
         if pressed[pygame.K_SPACE]:
-            if not gun.sprites()[0].shotdelay:
+
+            if gun.sprites()[0].shottimer==0:
                 bulletspritesgroup.add(gun.sprites()[0].shoot())
 
                 # close program

@@ -15,7 +15,6 @@ class gun(pygame.sprite.Sprite):
         super().__init__()
         # basic info about guns
 
-
         self.x, self.y = 0, 0
         self.direction = 1
         if type == "shotgun":
@@ -23,12 +22,12 @@ class gun(pygame.sprite.Sprite):
             self.framecount = 14
             self.height = 32
             self.width = 160
-            self.xoffset=(-30,50)
+            self.xoffset = (-30, 50)
             self.bulletcount = 5
-            self.shotdelay = 20
+            self.shotdelay = 80
         elif type == "assault rifle":
             self.framesprite = assultframes
-            self.framecount=24
+            self.framecount = 24
             self.height = 47
             self.width = 128
             self.xoffset = (-15, 35)
@@ -41,8 +40,8 @@ class gun(pygame.sprite.Sprite):
             self.width = 64
             self.xoffset = (-12, 32)
             self.bulletcount = 1
-            self.shotdelay = 20
-        self.shottimer=0
+            self.shotdelay = 60
+        self.shottimer = 0
         self.type = type
         self.ammo = 0
         self.shooting = False
@@ -59,7 +58,6 @@ class gun(pygame.sprite.Sprite):
             self.shooting = False
             self.frame = 0
 
-
         selectedframe = pygame.Surface((self.width, self.height)).convert_alpha()
         selectedframe.blit(self.framesprite, (0, 0), (self.width * floor(self.frame), 0, self.width, self.height))
         # some handwritten values due to inconsitencies
@@ -74,15 +72,15 @@ class gun(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midtop=(self.x, self.y + 5))
 
     def update(self, playerpos):
-        if self.shottimer>0:
-            self.shottimer-=1
-        # uses the player loaction to place the gun and update the image
+        if self.shottimer > 0:
+            self.shottimer -= 1
+        print(self.shottimer)
         self.x, self.y, self.direction = playerpos
         self.updatespriteimg()
 
     def shoot(self):
         self.shooting = True
-        self.shottimer=int(self.shotdelay)
+        self.shottimer = self.shotdelay
         # make a bullet and animate the gun
         bullets = [bullet(self.rect.center, self.direction) for i in range(self.bulletcount)]
         return bullets

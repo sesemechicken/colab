@@ -49,7 +49,6 @@ class player(pygame.sprite.Sprite):
                 self.jumping = False
 
         # horizontal movements ###########################
-        print(self.xvel,self.acceleration,self.direction)
         if self.moving:
             # change velocity until max speed is reached
             if -2 <= self.xvel <= 2:
@@ -58,7 +57,6 @@ class player(pygame.sprite.Sprite):
             # stop moving
             self.xvel = 0
 
-        print(self.xvel)
         #check for collide before hitting
         #self.checkfururecolide(maptiles)
         # apply velocity to y-axis of image
