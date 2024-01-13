@@ -6,7 +6,6 @@ pygame.init()
 screen = pygame.display.set_mode()
 clock = pygame.time.Clock()
 
-import threading
 import pygame.sprite
 import Gun
 import Player
@@ -41,8 +40,7 @@ def main():
     # ###########################################
     # main loop runs at 60fps
     while running:
-
-                # perform action on key press
+        # perform action on key press
         pressed = pygame.key.get_pressed()
         if pressed[pygame.K_w]:
             player.sprites()[0].move('w')
@@ -51,8 +49,7 @@ def main():
         if pressed[pygame.K_d]:
             player.sprites()[0].move('d')
         if pressed[pygame.K_SPACE]:
-
-            if gun.sprites()[0].shottimer==0:
+            if gun.sprites()[0].shottimer == 0:
                 bulletspritesgroup.add(gun.sprites()[0].shoot())
 
                 # close program

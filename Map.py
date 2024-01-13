@@ -20,17 +20,17 @@ def getenemys():
 
 
 def generatetiles(level):
-    ylevel = xlevel = 0
+    ylevel = -1
     for y in maps:
+        xlevel = -1
         ylevel += 1
-        for placeholder in y:
+        for type in y:
             xlevel += 1
-            tiles.append(tile(xlevel, ylevel, placeholder))
+            tiles.append(tile(xlevel, ylevel, type))
 
 
 def gettiles():
     return tiles
-
 
 class tile(pygame.sprite.Sprite):
     def __init__(self, x, y, tiletype):

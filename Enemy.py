@@ -1,13 +1,5 @@
-import os
-from math import floor
-
-import pygame
-
-# used to load
-spritesheets = [pygame.image.load('assets/DINOS/' + file).convert_alpha() for file in os.listdir('assets/DINOS')]
-
-
-class player(pygame.sprite.Sprite):
+import pygame.sprite
+class enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # set basic information
@@ -26,7 +18,6 @@ class player(pygame.sprite.Sprite):
         self.direction = 1
         self.xvel = 0
         self.yvel = 0
-        # used for pygameui of dinosuar
         self.frame = 1
         self.spritesheet = spritesheets[0]
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
