@@ -1,13 +1,20 @@
+from math import floor
+
 import pygame.sprite
+import os
+
+spritesheets = [pygame.image.load('assets/DINOS/' + file).convert_alpha() for file in os.listdir('assets/DINOS')]
+
+
 class enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y, type, level):
         super().__init__()
         # set basic information
-        self.x = 100
-        self.y = 200
+        self.x = x
+        self.y = y
         self.height = 24
         self.width = 24
-
+        self.level = level
         # set movement bools and tools
         self.falling = False
         self.moving = False
@@ -18,16 +25,16 @@ class enemy(pygame.sprite.Sprite):
         self.direction = 1
         self.xvel = 0
         self.yvel = 0
+        self.maxspeed=2
+        # for ui
         self.frame = 1
-        self.spritesheet = spritesheets[0]
+        self.spritesheet = spritesheets[3]
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update(self, maptiles):
         # please note speed and velocity are interchangeable terms but velocity can be either direction
-
         # vertical movements ###########################
-
         # accelerate positively toward ground
         if self.falling:
             self.yvel += self.acceleration
@@ -42,7 +49,7 @@ class enemy(pygame.sprite.Sprite):
         # horizontal movements ###########################
         if self.moving:
             # change velocity until max speed is reached
-            if -2 <= self.xvel <= 2:
+            if -self.maxspeed <= self.xvel <= self.maxspeed:
                 self.xvel += self.acceleration * self.direction
         else:
             # stop moving
@@ -54,7 +61,6 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y += self.yvel
         # apply velocity to x-axis of image
         self.rect.x += self.xvel
-
         self.updatespriteimg()
 
     def updatespriteimg(self):
@@ -110,10 +116,10 @@ class enemy(pygame.sprite.Sprite):
             self.moving = True
             self.standingstill = False
 
-    def checkfururecolide(self, maptiles):
-        if self.rect.collideobjects(maptiles):
+    def checkfururecolide(self, maptilesspritegroup, playerspritegroup):
+        if self.rect.collideobjects(maptilesspritegroup):
             print("hit")
 
     # currentlly used to make gun in right place
     def getpos(self):
-        return self.rect.center[0], self.rect.center[1], self.direction
+        return self.rect

@@ -51,12 +51,7 @@ class gun(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midtop=(self.x, self.y))
 
     def updatespriteimg(self):
-        # changes the ui image
-        if self.shooting:
-            self.frame += .5
-        if self.frame >= self.framecount:
-            self.shooting = False
-            self.frame = 0
+
 
         selectedframe = pygame.Surface((self.width, self.height)).convert_alpha()
         selectedframe.blit(self.framesprite, (0, 0), (self.width * floor(self.frame), 0, self.width, self.height))
@@ -74,9 +69,13 @@ class gun(pygame.sprite.Sprite):
     def update(self, playerpos):
         if self.shottimer > 0:
             self.shottimer -= 1
-        print(self.shottimer)
-        self.x, self.y, self.direction = playerpos
-        self.updatespriteimg()
+        if self.shooting:
+            self.frame += .5
+        if self.frame >= self.framecount:
+            self.shooting = False
+            self.frame = 0
+        self.x, self.y, self.direction = playerpos # attaches gun to player
+        self.updatespriteimg() # changes the ui image
 
     def shoot(self):
         self.shooting = True
@@ -112,5 +111,9 @@ class bullet(pygame.sprite.Sprite):
         if -.5 < self.velx < .5:
             self.kill()
 
+    def checkfururecolide(self, maptiles):
+        if self.rect.collideobjects(maptiles):
+            print("hit")
+
     def getpos(self):
-        return self.rect.x, self.rect.y
+        return self.rect
