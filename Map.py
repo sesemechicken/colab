@@ -6,35 +6,37 @@ import pygame.sprite
 import Enemy
 
 # load mapdata
-maps = [open('assets/MAPS/' + file).read() for file in os.listdir('assets/MAPS')]
+maps = [open('assets/MAPS/' + file).read().replace("\n",":").split(":") for file in os.listdir('assets/MAPS')]
+'''
+map files formatted as:
+word, word, word, *100
+word, word, word, *100
+formatted as [['',''],['','']]
+where [] is the main list ['',''] is a map and '' is a fill line across the x
+maps [][].split(,)[x] is used so that:
+the first bracket selects the ['',''] (map)
+second bracked selects the '', (row)
+the third bracket selects the separate items in this string that was split (column)
+'''
 tilesize = 35
 size = tilesize * 100
 enemys = []
 tiles = []
 
 
-def generateenemys():
-
-    pass
+def readfile(level):
+    for y in range(100):
+        for x in range(100):
+            type=maps[level][y].split(',')[x]
+            print(type)
+            if type[-1] in ["{number}" for number in range(9)]:
+                enemys.append(Enemy.enemy(x, y, type[0:-1], type[-1]))
+            else:
+                tiles.append(tile(x, y, type))
 
 
 def getenemys():
     return enemys
-
-def readfile(level):
-    ylevel = -1
-    for y in maps:
-        xlevel = -1
-        ylevel += 1
-        for type in y:
-            xlevel += 1
-            if type[-1] in ["{number}" for number in range(9)]:
-                enemys.append(Enemy.enemy(xlevel, ylevel, type[0:-1], type[-1]))
-            else:
-                tiles.append(tile(xlevel, ylevel, type))
-
-def generatetiles():
-    pass
 
 
 def gettiles():

@@ -51,7 +51,7 @@ class player(pygame.sprite.Sprite):
         # horizontal movements ###########################
         if self.moving:
             # change velocity until max speed is reached
-            if -2 <= self.xvel <= 2:
+            if abs(self.xvel) <= 2:
                 self.xvel += self.acceleration * self.direction
         else:
             # stop moving

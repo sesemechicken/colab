@@ -24,7 +24,7 @@ class gun(pygame.sprite.Sprite):
             self.width = 160
             self.xoffset = (-30, 50)
             self.bulletcount = 5
-            self.shotdelay = 80
+            self.shotdelay = self.framecount * 6  # 84 frames or 2.8 seconds
         elif type == "assault rifle":
             self.framesprite = assultframes
             self.framecount = 24
@@ -32,7 +32,7 @@ class gun(pygame.sprite.Sprite):
             self.width = 128
             self.xoffset = (-15, 35)
             self.bulletcount = 1
-            self.shotdelay = 10
+            self.shotdelay = self.framecount  # 24 frames or .8 seconds
         elif type == "pistol":
             self.framesprite = pistolframes
             self.framecount = 12
@@ -40,7 +40,7 @@ class gun(pygame.sprite.Sprite):
             self.width = 64
             self.xoffset = (-12, 32)
             self.bulletcount = 1
-            self.shotdelay = 60
+            self.shotdelay = self.framecount * 3  # 36 frames or 1.05 seconds
         self.shottimer = 0
         self.type = type
         self.ammo = 0
@@ -51,7 +51,6 @@ class gun(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midtop=(self.x, self.y))
 
     def updatespriteimg(self):
-
 
         selectedframe = pygame.Surface((self.width, self.height)).convert_alpha()
         selectedframe.blit(self.framesprite, (0, 0), (self.width * floor(self.frame), 0, self.width, self.height))
@@ -70,12 +69,12 @@ class gun(pygame.sprite.Sprite):
         if self.shottimer > 0:
             self.shottimer -= 1
         if self.shooting:
-            self.frame += .5
+            self.frame += 1
         if self.frame >= self.framecount:
             self.shooting = False
             self.frame = 0
-        self.x, self.y, self.direction = playerpos # attaches gun to player
-        self.updatespriteimg() # changes the ui image
+        self.x, self.y, self.direction = playerpos  # attaches gun to player
+        self.updatespriteimg()  # changes the ui image
 
     def shoot(self):
         self.shooting = True
@@ -108,7 +107,7 @@ class bullet(pygame.sprite.Sprite):
         self.rect.x += self.velx
         self.rect.y += self.vely / 2
         # if too slow
-        if -.5 < self.velx < .5:
+        if abs(self.velx) < .5:
             self.kill()
 
     def checkfururecolide(self, maptiles):

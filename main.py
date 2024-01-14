@@ -17,7 +17,7 @@ def performsetup(tilesprites: list, enemysprites: list):
     playerspritegroup.add(Player.player())
 
     gunspritegroup = pygame.sprite.Group()
-    gunspritegroup.add(Gun.gun("assault rifle"))
+    gunspritegroup.add(Gun.gun("shotgun"))
 
     tilespritesgroup = pygame.sprite.Group()
     tilespritesgroup.add(*tilesprites)
@@ -32,8 +32,7 @@ def main():
     # setup map and game loop
     frametime = 0
     running = True
-    Map.generatetiles(0)
-    Map.generateenemys(0)
+    Map.readfile(0)
     # spritegroups setup based on player, gun, map and enemygeneration from map
     player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.gettiles(), Map.getenemys())
     bulletspritesgroup = pygame.sprite.Group()
