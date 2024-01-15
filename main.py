@@ -32,9 +32,9 @@ def main():
     # setup map and game loop
     frametime = 0
     running = True
-    #Map.readfile(0)
+    Map.readfile(0)
     # spritegroups setup based on player, gun, map and enemygeneration from map
-    player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.gettiles(), Map.getenemys())
+    player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.returntiles(), Map.returnenemys())
     bulletspritesgroup = pygame.sprite.Group()
     # ###########################################
     # main loop runs at 60fps
@@ -62,14 +62,18 @@ def main():
         # clear screen
         screen.fill((0, 0, 0))
         # used to update and draw sprites
-        tilespritesgroup.update()
+        tilespritesgroup.update(player.sprites()[0].rect.topleft)
         tilespritesgroup.draw(screen)
-        player.update(Map.gettiles())
+
+        player.update(Map.returntiles(), Map.returnenemys())
         player.draw(screen)
+
         gun.update(player.sprites()[0].getpos())
         gun.draw(screen)
+
         enemyspritesgroup.update()
         enemyspritesgroup.draw(screen)
+
         bulletspritesgroup.update()
         bulletspritesgroup.draw(screen)
         # clear screen

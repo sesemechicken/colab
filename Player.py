@@ -11,8 +11,8 @@ class player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # set basic information
-        self.x = 100
-        self.y = 200
+        self.x = 400
+        self.y = 0
         self.height = 24
         self.width = 24
 
@@ -32,7 +32,7 @@ class player(pygame.sprite.Sprite):
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
-    def update(self, maptiles):
+    def update(self, maptiles, enemytiles):
         # please note speed and velocity are interchangeable terms but velocity can be either direction
 
         # vertical movements ###########################
