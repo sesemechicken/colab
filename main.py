@@ -5,7 +5,7 @@ pygame.init()
 # screen is where everything is drawn or blited
 screen = pygame.display.set_mode()
 clock = pygame.time.Clock()
-
+height,width=screen.get_size()
 import pygame.sprite
 import Gun
 import Player
@@ -32,9 +32,10 @@ def main():
     # setup map and game loop
     frametime = 0
     running = True
-    Map.readfile(0)
+    currentmap = Map.map()
+    currentmap.readfile(0)
     # spritegroups setup based on player, gun, map and enemygeneration from map
-    player, gun, tilespritesgroup, enemyspritesgroup = performsetup(Map.returntiles(), Map.returnenemys())
+    player, gun, tilespritesgroup, enemyspritesgroup = performsetup(currentmap.returntiles(), currentmap.returnenemys())
     bulletspritesgroup = pygame.sprite.Group()
     # ###########################################
     # main loop runs at 60fps
@@ -62,10 +63,10 @@ def main():
         # clear screen
         screen.fill((0, 0, 0))
         # used to update and draw sprites
-        tilespritesgroup.update(player.sprites()[0].rect.topleft)
+        currentmap.update(player.sprites()[0].rect.topleft, (player.sprites()[0].xvel,player.sprites()[0].yvel))
         tilespritesgroup.draw(screen)
 
-        player.update(Map.returntiles(), Map.returnenemys())
+        player.update(currentmap.returntiles(), currentmap.returnenemys())
         player.draw(screen)
 
         gun.update(player.sprites()[0].getpos())
