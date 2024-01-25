@@ -1,9 +1,10 @@
 import pygame
+from collision import collision
 
 # all setup goes here ##
 pygame.init()
 # screen is where everything is drawn or blited
-screen = pygame.display.set_mode()
+screen = pygame.display.set_mode((600,400))
 clock = pygame.time.Clock()
 height,width=screen.get_size()
 import pygame.sprite
@@ -77,6 +78,8 @@ def main():
 
         bulletspritesgroup.update()
         bulletspritesgroup.draw(screen)
+
+        collision(tilespritesgroup,player,gun,enemyspritesgroup,bulletspritesgroup)
         # clear screen
         pygame.display.flip()
         # set speed of frames and count frames

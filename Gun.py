@@ -84,6 +84,7 @@ class gun(pygame.sprite.Sprite):
         return bullets
 
 
+
 class bullet(pygame.sprite.Sprite):
     def __init__(self, gunpos, direction):
         # unfinished

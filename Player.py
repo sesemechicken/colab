@@ -30,23 +30,23 @@ class player(pygame.sprite.Sprite):
         self.frame = 1
         self.spritesheet = spritesheets[0]
         self.image = pygame.Surface((self.width, self.height)).convert_alpha()
+        self.mask=pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update(self, maptiles, enemytiles):
         # please note speed and velocity are interchangeable terms but velocity can be either direction
 
         # vertical movements ###########################
-
-        # accelerate positively toward ground
-        if self.falling:
-            self.yvel += self.acceleration
-
         # accelerate negatively away from ground until a specific upward speed is reached
         if self.jumping:
             self.yvel -= self.acceleration
             if self.yvel < -4:
-                self.falling = True
                 self.jumping = False
+        # accelerate positively toward ground
+        elif self.falling:
+            self.yvel += self.acceleration
+
+
 
         # horizontal movements ###########################
         if self.moving:
@@ -56,14 +56,10 @@ class player(pygame.sprite.Sprite):
         else:
             # stop moving
             self.xvel = 0
-
-        # check for collide before hitting
-        # self.checkfururecolide(maptiles)
         # apply velocity to y-axis of image
         self.rect.y += self.yvel
         # apply velocity to x-axis of image
         self.rect.x += self.xvel
-
         self.updatespriteimg()
 
     def updatespriteimg(self):
@@ -96,6 +92,7 @@ class player(pygame.sprite.Sprite):
             selectedframe = pygame.transform.flip(selectedframe, True, False)
         # resize and set as active image
         self.image = pygame.transform.scale(selectedframe, (self.width * 2, self.height * 2))
+        self.mask=pygame.mask.from_surface(self.image)
         self.image.set_colorkey((0, 0, 0))
 
     def move(self, key=None):
@@ -105,8 +102,9 @@ class player(pygame.sprite.Sprite):
             self.standingstill = True
             self.xvel = 0
 
-        elif not self.jumping and key == "w":
+        elif not self.jumping and not self.falling and key == "w":
             self.jumping = True
+            self.yvel=0
 
         # horizontal controls change direction and reset velocity
         elif key == "d":
@@ -119,9 +117,12 @@ class player(pygame.sprite.Sprite):
             self.moving = True
             self.standingstill = False
 
-    def checkfururecolide(self, maptiles):
-        if self.rect.collideobjects(maptiles):
-            print("hit")
+    def land(self):
+        self.yvel=0
+        self.falling=False
+        self.jumping=False
+        self.frame=2
+
 
     # currentlly used to make gun in right place
     def getpos(self):

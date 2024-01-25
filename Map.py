@@ -12,8 +12,9 @@ class map:
     """
     map files formatted as:
     word, word, word, *40
-    word, word, word, *40...
-
+    word, word, word, *40
+    *22...
+    right now 1 map fills a 1920x1080 screen
     maps is formatted as [['',''],['','']]
     where [] is the main list ['',''] is a map and '' is a fill line across the x
     maps [][].split(,)[x] is used so that:
@@ -29,7 +30,7 @@ class map:
         self.tiles = []
 
     def readfile(self, level):
-        for y in range(40):
+        for y in range(22):
             for x in range(40):
                 type = maps[level][y].split(',')[x]
                 if type[-1] in [number for number in range(9)]:
@@ -63,6 +64,7 @@ class tile(pygame.sprite.Sprite):
         self.type = tiletype
         # TODO add names for tile pieces for use in map files also add tile sprites
         self.image = pygame.Surface((self.size, self.size)).convert_alpha()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
         self.image.fill("red")
 
